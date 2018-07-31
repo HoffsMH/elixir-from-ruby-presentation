@@ -4,9 +4,8 @@
 
   Basic topics will include
     - tooling
-    - data types
-    - debugging
-    - testing
+    - language basics
+    - debugging - little bit of testing
 
 ## Installing
 

@@ -1,6 +1,7 @@
 ok we just created an app and opened a repl
   - data types (language is dynamic but type description and static analysis is a feature)
     numbers are just numbers
+      - the math is boring
     strings/binary
     charlist are not strings
     atoms => ruby Symbols Ab.Cd is a single atom
@@ -19,7 +20,8 @@ ok we just created an app and opened a repl
   - documentation
     - doc tests - tests in general
     - doc generation
-    - how to find docs easily
+      ex_doc 0.17.0
+    - how to find docs easily on hex.pm
   - greet vs hello
   - function capturing
   - hello is greet
@@ -39,7 +41,12 @@ ok we just created an app and opened a repl
     - pattern matching with cons operator
     - notice what the program now does without a single if statement
 
-  - questions
+  - questions/directions to steer in
+    - concurrency
+      - benchmarking
+    - testing
+    - the web
+      - plug
   
 
 

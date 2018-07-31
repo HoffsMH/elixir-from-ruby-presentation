@@ -1,3 +1,13 @@
+## Intro
+  goals should be that someone coming from ruby can immeadiately start making small
+  standalone applications in Elixir
+
+  Basic topics will include
+    - tooling
+    - data types
+    - debugging
+    - testing
+
 ## Installing
 
 ##### 0. Erlang
@@ -74,7 +84,7 @@ mix
 mix help
 ```
 
-### Lets have fun
+### Creating our first app
 
 ```sh
 mix new example_app
@@ -95,32 +105,8 @@ example_app
     ├── example_app_test.exs
     └── test_helper.exs
 ```
-
-open `lib/example_app.ex`
-
-```elixir 
-# lib/example_app.ex
-defmodule ExampleApp do
-  @moduledoc """
-  Documentation for ExampleApp.
-  """
-
-  @doc """
-  Hello world.
-
-  ## Examples
-
-      iex> ExampleApp.hello
-      :world
-
-  """
-  def hello do
-    :world
-  end
-end
-```
-
-ok lets put our project in a repl
+cd into our new app
+and put our project in a repl
 
 ```sh
 iex -S mix
@@ -132,17 +118,16 @@ ExampleApp    Exception
 iex(2)> ExampleApp.hello
 :world
 ```
+
+
 Notice the stuff above the definition of `hello` in our `lib/example_app.ex` ?
-Its documentation! and It gets a VIP pass througout the language
-h will display documentation
+Its documentation! and its a first class citizen in elixir
+`h` will display documentation in an iex session
 
 ```iex
 iex(3)> h ExampleApp
 iex(4)> h ExampleApp.hello
 ```
-
-The first thing anyone should learn how to do is how to get in the thick of things
-
 lets define a new method on our `ExampleApp` module
 
 ```elixir
@@ -159,14 +144,15 @@ Compiling 1 file (.ex)
 iex(6)> ExampleApp.greet("José")
 "hello José"
 ```
-
-now lets debug
+one of the first things anyone should learn is how to get in the thick of things!
+lets edit our `greet` function again
 
 ```elixir
 def greet(name) do
   require IEx
   IEx.pry
   "hello #{name}!"
+
 end
 ```
 
@@ -190,36 +176,107 @@ Interactive Elixir (1.6.6) - press Ctrl+C to exit (type h() ENTER for help)
 iex(1)>
 ```
 
-the term `greet` really is similar to `hello`
+the word `greet` really is similar to `hello`
 
+lets rewrite our module
+
+```elixir
+  defmodule ExampleApp do
+    @moduledoc """
+    Documentation for ExampleApp.
+    """
+
+    @doc """
+    Hello world.
+
+    ## Examples
+
+        iex> ExampleApp.hello
+        :world
+
+    """
+    def hello do
+      "hello World!"
+    end
+
+    def hello(name) do
+      "hello #{name}!"
+    end
+  end
+```
+
+try running `hello` with and without a name.
+both work!
+
+lets make it a little more dry
+
+```elixir
+def hello, do: hello("World")
+def hello(name) do
+  "hello #{name}"
+end
+```
+
+
+- what if we wanted extra volume for grandma
+  - pattern matching
+  - show when we move grandma clause down it no longer matches
+
+- what if we wanted to greet a list of people
+  def hello(name_list), when(is_list(name_list)) do
+    Enum.map name_list, fn name -> hello(name) end
+  end
+  - list with enum
+  - show guards
+  - fn -> syntax is wordy lets use a shorthand
+  def hello(name_list), when(is_list(name_list)) do
+    Enum.map name_list, &(hello(&1))
+  end
+
+
+- what if we wanted to do it simpler and more functional
+ def hello([name]), do: [hello(name)] 
+ - that only works for one name
+ - head and tail syntax for arrays
+  [head| tail]
+  def hello([first_name | remaining_names])
+    [hello(first_name) | hello(remaining_names)]
+  end
+
+
+- pipe operator go back to enum method
+  def hello(name_list), when(is_list(name_list)) do
+    Enum.map name_list, fn name -> hello(name) end
+  end
+
+  could also be
+  def hello(name_list), when(is_list(name_list)) do
+    name_list |> Enum.map fn name -> hello(name) end
+  end  
+  could also be
+  def hello(name_list), when(is_list(name_list)) do
+    name_list
+    |> Enum.map fn name -> hello(name) end
+  end  
+
+- so that all returns either a list of hellos or a single hello what if we want to report those hellos to std out
+  def hello(name_list), when(is_list(name_list)) do
+    name_list
+    |> Enum.map fn name -> hello(name) end
+    |> Enum.each &
+  end  
 
 what are the most important things to give a solid ground from which to start
 exploring the platform.
 lets just start listing then prioritize
 
 
-level 1
-
-mix
-  mix new
-  directory structure
-
-iex
-  iex -S anything
-    iex -S mix gives you repl with everything in your mix project loaded
-    iex -S mix test runs test inside an iex, which allows pry
-    later on iex -S mix phx.server will combine the functionality of `rails s` and `rails c`
-  how stuff is loaded
-    file names are not linked with module names at all
   helpers
     h -  tells you about things
     r - reload a module
+    ls
+    recompile
 
-
-language basics
-  Modules
-  functions
-  function capturing
 
 level 2
   basic code navigation - platform
@@ -228,24 +285,4 @@ level 2
     erlang access :
     :observer.start
     :debugger.start
-
-  ExUnit
-
-
-  starting concurrency
-
-
-
-
-
-
-
-ok inspecting code
-organizing code
-  modules
-    require
-    import
-    alias
-    use
-
-
+    ExUnit
